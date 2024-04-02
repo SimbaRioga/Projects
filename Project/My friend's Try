@@ -1,0 +1,66 @@
+InputTask1
+
+Tmax=max(Times);
+Tmin=min(Times);
+
+%I need to integrate each line of each matrix using the same formula. 
+% I assume it'll be straightforward.(hopefully not a jinx)
+
+%for x
+
+Displacements_x = []; % Initialize dis_x to store integral results
+xN_strips=[];
+
+for m = 1:size(Velocities_x, 1)
+    integral = inf;
+    integral_prev = 0;
+    N = 100; % Initial number of intervals
+    while abs(integral - integral_prev) >= 1/100000
+        s = (Tmax - Tmin) / N;
+
+        integral_prev = integral;
+        % Calculate the integral using the trapezoidal rule
+        integral = 0.5 * (polyvalm(Velocities_x(m,:), Tmax) + polyvalm(Velocities_x(m,:), Tmin));
+        for k = 1:N-1
+            integral = integral + polyvalm(Velocities_x(m,:), Tmin + k * s);
+        end
+        integral = integral * s * 1000;
+
+        % Increase the number of intervals for the next iteration
+        N = N + 10;
+    end
+    % Store the integral result and corresponding value of s
+    Displacements_x = [Displacements_x; integral];
+    xN_strips=[xN_strips; N];
+end
+Displacements_x=Displacements_x.*1000;
+xN_strips;
+%perfect
+
+%for y
+Displacements_y = []; % Initialize dis_x to store integral results
+yN_strips=[];
+
+for m = 1:size(Velocities_y, 1)
+    integral = inf;
+    integral_prev = 0;
+    N = 100; % Initial number of intervals
+    while abs(integral - integral_prev) >= 1/100000
+        s = (Tmax - Tmin) / N;
+
+        integral_prev = integral;
+        % Calculate the integral using the trapezoidal rule
+        integral = 0.5 * (polyvalm(Velocities_y(m,:), Tmax) + polyvalm(Velocities_y(m,:), Tmin));
+        for k = 1:N-1
+            integral = integral + polyvalm(Velocities_y(m,:), Tmin + k * s);
+        end
+        integral = integral*s;
+        N = N + 10;
+    end
+    Displacements_y = [Displacements_y; integral];
+    yN_strips = [yN_strips; N];
+end
+Displacements_y=Displacements_y.*1000;
+
+Displacements_x
+Displacements_y
