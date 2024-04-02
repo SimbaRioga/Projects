@@ -1,0 +1,32 @@
+% 2617888
+% Simbarashe Rioga
+
+InputTask1
+
+n = size(Velocities_x, 1);
+N = 100;
+x_max = max(Times);
+x_min = min(Times);
+
+s = (x_max - x_min) / N;
+
+areas_x = zeros(n, n);
+areas_y = zeros(n, n); 
+
+for row = 1 : n
+    for col = 1 : n
+        for i = 1 : n - 1
+            areas_x(row, col) = 0.5 * s * (Velocities_x(i, col) + Velocities_x(i + 1, col));
+            areas_y(row, col) = 0.5 * s * (Velocities_y(i, col) + Velocities_y(i + 1, col));
+        end
+    end
+end
+
+displacement_x = sum(areas_x, 2); 
+displacement_y = sum(areas_y, 2); 
+
+disp(Velocities_x)
+
+disp(areas_x)
+
+disp(displacement_x)
